@@ -20,7 +20,6 @@ window.onload = function(){
     appleSkin.src = "pomme.png";
     //Gestion score
     let bestScore = localStorage.getItem('bestScore') || 0;
-    const resetButton = document.getElementById('resetButton');
     //Gestion des sons
     const audioMusic = document.createElement("audio");
     audioMusic.src = "DJVI - Cycles.mp3"; 
@@ -30,8 +29,7 @@ window.onload = function(){
     audioGameOver.src = "GameOver.mp3";
     audioGameOver.volume = 0.02;
     document.body.appendChild(audioMusic);
-
-
+    
     initGame();
     initControls();
 
@@ -64,7 +62,16 @@ window.onload = function(){
         ctx.lineWidth = "5";
         ctx.strokeText("Appuyer sur ESPACE pour jouer", (canvasWidth/2), (canvasHeight/2)+20);
         ctx.fillText("Appuyer sur ESPACE pour jouer", (canvasWidth/2), (canvasHeight/2)+20); 
+        // Press M to mute
+        ctx.font = "bold 20px sans-serif";
+        ctx.fillStyle = "black"; 
+        ctx.textAlign = "center";
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "1";
+        ctx.strokeText("Appuyer sur M pour activer/désactiver la musique", (canvasWidth/2), (canvasHeight/2)+150);
+        ctx.fillText("Appuyer sur M pour activer/désactiver la musique", (canvasWidth/2), (canvasHeight/2)+150); 
         document.body.appendChild(canvas);
+
     };
 
     function initControls(){
@@ -91,27 +98,6 @@ window.onload = function(){
             bestScore = 0;
             alert('Au prochain lancement votre meilleur score sera rénitialisé à 0 !');
             });
-        // Mute music
-        const muteButton = document.createElement('button');
-        muteButton.id ='muteButton';
-        muteButton.textContent = "Activer/Désactiver la musique";
-        muteButton.style.margin = '5px auto';
-        muteButton.style.display = 'block';
-        muteButton.style.backgroundColor = 'green';
-        muteButton.style.fontSize = '20px';
-        muteButton.style.color = 'black';
-        muteButton.style.border = '3px solid black';
-        muteButton.style.borderRadius = '5px'
-        muteButton.addEventListener('mouseenter', () => {
-            muteButton.style.backgroundColor = 'lightgreen';
-        });
-    
-        muteButton.addEventListener('mouseleave', () => {
-            muteButton.style.backgroundColor = 'green';
-        });
-        muteButton.addEventListener('click', () => {
-            Mute()
-            });
             // Règles
         const PopRules = document.createElement('button');
         PopRules.id = 'resetButton';
@@ -134,7 +120,6 @@ window.onload = function(){
             alert('Aidez Snaky à devenir le plus gros possible en mangeant les pommes avec les flèches directionnelles. Attention à ne pas se prendre de mur ou se manger la queue !');
             });
         document.body.appendChild(PopRules);
-        document.body.appendChild(muteButton);
         document.body.appendChild(resetButton);
     }
 
@@ -230,8 +215,9 @@ window.onload = function(){
         ctx.restore();
     }
 
+
     function Mute() {
-        if (audioMusic.volume === 0 || audioGameOver.volume === 0) {
+        if (audioMusic.volume === 0 || audioGameOver.volume === 0){
             audioMusic.volume = 0.02;
             audioGameOver.volume = 0.02; // Unmute, set the volume to a non-zero value
             
@@ -240,6 +226,8 @@ window.onload = function(){
             audioGameOver.volume = 0; // Mute, set the volume to 0
         }
     }
+
+
     document.onkeydown = function HandleKeyDown(event){
         let key = event.key;
         let newDirection;
